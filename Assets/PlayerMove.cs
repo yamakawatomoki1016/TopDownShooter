@@ -16,7 +16,9 @@ public class PlayerMove : MonoBehaviour
     //カーソル
     [SerializeField]
     private Cursor cursor;
-
+    [SerializeField]
+    private Arm arm_;
+    private bool isPushFire_;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -26,10 +28,26 @@ public class PlayerMove : MonoBehaviour
 
         //取得できていなければ処理を停止
         Assert.IsTrue(isGet, "componentの取得失敗");
+
+        isPushFire_ = false;
+    }
+
+    private void UpdateGunTrigger()
+    {
+        if (!arm_.IsGrabGun()) { return; }
+        if (isPushFire_)
+        {
+            arm_.OnTrigger();
+        }
+        else
+        {
+            arm_.OffTrigger();
+        }
     }
 
     private void Update()
     {
+        UpdateGunTrigger();
         //もしCursorのレイがヒットしてなければ早期リターン
         if (!cursor.GetIsHit()) { return; }
 
@@ -44,6 +62,22 @@ public class PlayerMove : MonoBehaviour
 
         //LookAtメソッドは、引数で指定した座標へ向くメソッドだ
         transform.LookAt(lookAt);
+    }
+    private void TryGetGun(Collider item)
+    {
+        GunBase gun;
+        if(!item.TryGetComponent(out gun)) { return; }
+        if(!gun.GetIsAlone()) { return; }
+        arm_.Grab(gun);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Item")) {  return; }
+        TryGetGun(other);
+    }
+    public void OnFire(InputValue inputValue)
+    {
+        isPushFire_ = inputValue.isPressed;
     }
     public void OnMove(InputValue value)
     {

@@ -62,9 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Cursor.cs" />
+    <Compile Include="Assets\HandGun.cs" />
+    <Compile Include="Assets\RayBullet.cs" />
+    <Compile Include="Assets\GunBase.cs" />
+    <Compile Include="Assets\Health.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\PlayerFollower.cs" />
     <Compile Include="Assets\PlayerMove.cs" />
+    <Compile Include="Assets\Arm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
